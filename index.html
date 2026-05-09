@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Get in touch — Obsessed Opportunities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050608;
+    --bg-card: #0d0f12;
+    --line: rgba(255,255,255,0.08);
+    --line-strong: rgba(255,255,255,0.16);
+    --text: #f4f4f5;
+    --text-dim: #8a8d93;
+    --text-mute: #5a5d64;
+    --accent: #1e6bff;
+    --accent-glow: rgba(30,107,255,0.35);
+    --serif: "Instrument Serif", "Times New Roman", serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+    --sans: "Geist", -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* atmospheric backdrop behind modal */
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 800px 600px at 20% 30%, rgba(30,107,255,0.06), transparent 60%),
+      radial-gradient(ellipse 600px 400px at 80% 80%, rgba(30,107,255,0.04), transparent 60%),
+      var(--bg);
+    z-index: 1;
+  }
+  .backdrop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 1000px 700px at 50% 50%, black, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 1000px 700px at 50% 50%, black, transparent 80%);
+  }
+
+  /* center the modal */
+  .stage {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 10;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  /* ====== MODAL ====== */
+  .modal {
+    position: relative;
+    width: 100%;
+    max-width: 620px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 48px 56px 44px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+    animation: modalIn 0.6s cubic-bezier(0.22,1,0.36,1) 0.1s forwards;
+  }
+
+  @keyframes modalIn {
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* glow inside modal */
+  .modal::before {
+    content: "";
+    position: absolute;
+    top: -200px; right: -150px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(30,107,255,0.18), transparent 60%);
+    pointer-events: none;
+  }
+  /* grid texture inside modal */
+  .modal::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse 600px 400px at 80% 0%, black, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 600px 400px at 80% 0%, black, transparent 70%);
+  }
+
+  .modal > * { position: relative; z-index: 1; }
+
+  /* corner brackets */
+  .corner {
+    position: absolute;
+    width: 14px; height: 14px;
+    border-color: var(--line-strong);
+    border-style: solid;
+    z-index: 2;
+  }
+  .corner.tl { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
+  .corner.tr { top: 12px; right: 12px; border-width: 1px 1px 0 0; }
+  .corner.bl { bottom: 12px; left: 12px; border-width: 0 0 1px 1px; }
+  .corner.br { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
+
+  /* close */
+  .modal__close {
+    position: absolute;
+    top: 22px; right: 22px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 3;
+  }
+  .modal__close:hover {
+    color: var(--text);
+    border-color: var(--text);
+    transform: rotate(90deg);
+  }
+
+  /* header */
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .section-label .marker {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+  .section-label .marker--success {
+    background: #22c55e;
+    box-shadow: 0 0 12px rgba(34,197,94,0.4);
+  }
+
+  .modal h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 44px;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .modal h2 em { font-style: italic; color: var(--accent); font-weight: 400; }
+
+  .modal__sub {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.55;
+    margin-bottom: 36px;
+    max-width: 440px;
+  }
+
+  /* form */
+  form { display: flex; flex-direction: column; gap: 24px; }
+  .field { position: relative; }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .field__label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+    margin-bottom: 8px;
+    transition: color 0.2s ease;
+  }
+  .field__label .num { color: var(--text-dim); margin-right: 10px; }
+  .field:focus-within .field__label { color: var(--accent); }
+  .field:focus-within .field__label .num { color: var(--accent); }
+
+  .field__input,
+  .field__textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line-strong);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    padding: 8px 0 12px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    resize: none;
+  }
+  .field__input::placeholder,
+  .field__textarea::placeholder {
+    color: var(--text-mute);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 17px;
+  }
+  .field__input:focus,
+  .field__textarea:focus {
+    border-bottom-color: var(--accent);
+  }
+  .field__textarea { min-height: 60px; line-height: 1.5; }
+
+  /* footer */
+  .modal__footer {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .modal__note {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+    line-height: 1.6;
+  }
+  .modal__note span { color: var(--text-dim); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 14px 22px 14px 24px;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.2s ease;
+  }
+  .btn-primary:hover {
+    background: #2c79ff;
+    box-shadow: 0 12px 40px -8px var(--accent-glow);
+    transform: translateY(-1px);
+  }
+  .btn-primary .arrow {
+    width: 16px; height: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s ease;
+  }
+  .btn-primary:hover .arrow { transform: translateX(3px); }
+
+  /* success */
+  .modal.is-success .form-wrap { display: none; }
+  .success {
+    display: none;
+    padding: 24px 0;
+  }
+  .modal.is-success .success { display: block; }
+  .success__check {
+    width: 44px; height: 44px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent);
+    margin-bottom: 24px;
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+  .success h3 {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin-bottom: 12px;
+  }
+  .success h3 em { font-style: italic; color: var(--accent); }
+  .success p {
+    color: var(--text-dim);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 420px;
+  }
+
+  /* mobile */
+  @media (max-width: 640px) {
+    .modal { padding: 36px 24px 28px; max-height: 92vh; overflow-y: auto; }
+    .modal h2 { font-size: 32px; }
+    .field-row { grid-template-columns: 1fr; gap: 24px; }
+    .modal__footer { flex-direction: column-reverse; align-items: flex-start; }
+    .corner { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="backdrop"></div>
+
+<div class="stage">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <span class="corner tl"></span>
+    <span class="corner tr"></span>
+    <span class="corner bl"></span>
+    <span class="corner br"></span>
+
+    <button class="modal__close" id="closeBtn" aria-label="Close">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M2 2L10 10M10 2L2 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+      </svg>
+    </button>
+
+    <!-- form -->
+    <div class="form-wrap">
+      <div class="section-label">
+        <span class="marker"></span>
+        <span>Section 07 — Get in touch</span>
+      </div>
+      <h2 id="modalTitle">Tell us where it <em>hurts.</em></h2>
+      <p class="modal__sub">Drop a note. We read every one and reply within one business day — no funnels, no auto-sequences.</p>
+
+      <form id="contactForm" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label class="field__label" for="name"><span class="num">01</span>Name</label>
+            <input class="field__input" type="text" id="name" name="name" placeholder="who's writing" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label class="field__label" for="email"><span class="num">02</span>Email</label>
+            <input class="field__input" type="email" id="email" name="email" placeholder="where to reply" autocomplete="email" required />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="comment"><span class="num">03</span>Comment</label>
+          <textarea class="field__textarea" id="comment" name="comment" rows="3" placeholder="what's broken, what's the goal" required></textarea>
+        </div>
+
+        <div class="modal__footer">
+          <div class="modal__note">
+            Reply within <span>≤ 24 hours</span><br/>
+            No newsletter · No spam
+          </div>
+          <button class="btn-primary" type="submit">
+            Send message
+            <span class="arrow">→</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- success -->
+    <div class="success">
+      <div class="section-label">
+        <span class="marker marker--success"></span>
+        <span>Section 07 — Received</span>
+      </div>
+      <div class="success__check">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M4 10.5L8 14.5L16 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+        </svg>
+      </div>
+      <h3>Got it. We'll be <em>in touch.</em></h3>
+      <p>Your message is in the queue. Expect a reply from a real person — usually within a few hours, never longer than a business day.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('contactForm');
+  const modal = document.querySelector('.modal');
+  const closeBtn = document.getElementById('closeBtn');
+
+  // focus first field
+  setTimeout(() => document.getElementById('name').focus(), 700);
+
+  // form submit → success state
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form).entries());
+    console.log('Form submitted:', data);
+    // here send `data` to your backend
+    modal.classList.add('is-success');
+  });
+
+  // close button — fade out the modal
+  closeBtn.addEventListener('click', () => {
+    modal.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    modal.style.opacity = '0';
+    modal.style.transform = 'translateY(8px) scale(0.98)';
+  });
+</script>
+
+</body>
+</html>
